@@ -2,6 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   computed,
+  effect,
   input,
   signal,
   inject,
@@ -25,6 +26,17 @@ export class ColorDisplayComponent {
   private readonly colorService = inject(ColorService);
 
   readonly color = input.required<Color>();
+
+  /** Briefly true on each color change — drives CSS entrance animation */
+  readonly isEntering = signal(false);
+
+  constructor() {
+    effect(() => {
+      this.color(); // track changes
+      this.isEntering.set(true);
+      setTimeout(() => this.isEntering.set(false), 450);
+    });
+  }
 
   /** 'light' = use white text, 'dark' = use dark text */
   readonly textStyle = computed(() =>

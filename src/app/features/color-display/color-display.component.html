@@ -2,6 +2,7 @@
   class="color-display glass-panel"
   [class.text-light]="textStyle() === 'light'"
   [class.text-dark]="textStyle() === 'dark'"
+  [class.color-display--entering]="isEntering()"
   aria-label="Color information panel"
 >
   <!-- Main hex display -->

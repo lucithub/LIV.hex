@@ -121,6 +121,29 @@
   border-color: rgba(74, 222, 128, 0.4) !important;
 }
 
+/* ─── Entrance animation on color change ─── */
+@keyframes color-enter {
+  0%   { opacity: 0.4; transform: scale(0.98) translateY(4px); }
+  60%  { opacity: 1;   transform: scale(1.008); }
+  100% { opacity: 1;   transform: scale(1) translateY(0); }
+}
+
+.color-display--entering {
+  animation: color-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── Copy bounce animation ─── */
+@keyframes copy-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.9); }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.format-chip__copy--copied {
+  animation: copy-bounce 0.35s ease-out;
+}
+
 /* ─── Mobile ─── */
 @media (max-width: 480px) {
   .color-display { padding: 1.75rem 1.25rem; }
@@ -132,4 +155,10 @@
     grid-column: 1 / -1;
     justify-self: end;
   }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .color-display--entering { animation: none; }
+  .format-chip__copy--copied { animation: none; }
 }
