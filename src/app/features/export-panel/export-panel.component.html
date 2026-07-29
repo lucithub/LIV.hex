@@ -1,0 +1,68 @@
+@if (isOpen()) {
+  <!-- Backdrop -->
+  <div
+    class="export-backdrop"
+    (click)="close()"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Dialog -->
+  <div
+    class="export-dialog glass-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="export-dialog-title"
+  >
+    <!-- Header -->
+    <header class="export-dialog__header">
+      <h2 class="export-dialog__title" id="export-dialog-title">Export Palette</h2>
+      <button
+        class="glass-button export-dialog__close"
+        (click)="close()"
+        aria-label="Close export panel"
+        type="button"
+      >
+        ✕
+      </button>
+    </header>
+
+    <!-- Format tabs -->
+    <nav class="export-tabs" role="tablist" aria-label="Export format">
+      @for (tab of tabs; track tab.value) {
+        <button
+          class="export-tabs__btn glass-button"
+          [class.export-tabs__btn--active]="selectedFormat() === tab.value"
+          (click)="selectFormat(tab.value)"
+          role="tab"
+          [attr.aria-selected]="selectedFormat() === tab.value"
+          [attr.aria-label]="tab.label + ' format'"
+          type="button"
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </nav>
+
+    <!-- Code preview -->
+    <div class="export-preview" role="tabpanel">
+      <pre class="export-code"><code>{{ exportedCode() }}</code></pre>
+    </div>
+
+    <!-- Footer -->
+    <footer class="export-dialog__footer">
+      <button
+        class="export-copy-btn glass-button"
+        [class.export-copy-btn--copied]="isCopied()"
+        (click)="copy()"
+        [attr.aria-label]="isCopied() ? 'Copied!' : 'Copy ' + selectedFormat() + ' code'"
+        type="button"
+      >
+        @if (isCopied()) {
+          <span aria-hidden="true">✓</span> Copied!
+        } @else {
+          <span aria-hidden="true">⎘</span> Copy
+        }
+      </button>
+    </footer>
+  </div>
+}

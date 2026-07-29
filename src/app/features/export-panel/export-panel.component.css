@@ -1,0 +1,171 @@
+:host {
+  display: contents;
+}
+
+/* ─── Backdrop ─── */
+.export-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 60;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── Dialog ─── */
+.export-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 70;
+  width: min(560px, 92vw);
+  max-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  animation: dialogIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ─── Header ─── */
+.export-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.export-dialog__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-adaptive);
+}
+
+.export-dialog__close {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-text-adaptive);
+}
+
+/* ─── Format Tabs ─── */
+.export-tabs {
+  display: flex;
+  gap: 0.375rem;
+  padding: 1rem 1.5rem 0;
+  flex-shrink: 0;
+}
+
+.export-tabs__btn {
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-adaptive);
+  opacity: 0.55;
+  border-color: transparent;
+  background: transparent;
+  transition: all var(--transition-fast);
+}
+
+.export-tabs__btn:hover {
+  opacity: 0.85;
+  background: var(--color-surface-hover);
+  transform: none;
+}
+
+.export-tabs__btn--active {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+
+/* ─── Code preview ─── */
+.export-preview {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.export-code {
+  padding: 1.25rem;
+  font-family: 'Courier New', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: pre;
+  overflow-x: auto;
+  margin: 0;
+}
+
+/* ─── Footer ─── */
+.export-dialog__footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.export-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  color: var(--color-text-adaptive);
+  transition: all var(--transition-fast);
+}
+
+.export-copy-btn--copied {
+  color: #4ade80 !important;
+  border-color: rgba(74, 222, 128, 0.35) !important;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 480px) {
+  .export-dialog {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-height: 80dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    animation: sheetIn 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes sheetIn {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .export-dialog,
+  .export-backdrop { animation: none; }
+}
