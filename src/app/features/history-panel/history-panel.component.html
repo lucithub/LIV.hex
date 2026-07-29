@@ -1,0 +1,92 @@
+<!-- Backdrop -->
+@if (isOpen()) {
+  <div
+    class="history-backdrop"
+    (click)="close()"
+    aria-hidden="true"
+  ></div>
+}
+
+<!-- Drawer panel -->
+<aside
+  class="history-panel glass-panel"
+  [class.history-panel--open]="isOpen()"
+  aria-label="Color history panel"
+  [attr.aria-hidden]="!isOpen()"
+  role="complementary"
+>
+  <!-- Header -->
+  <header class="history-panel__header">
+    <div class="history-panel__title-group">
+      <h2 class="history-panel__title">History</h2>
+      @if (hasItems()) {
+        <span class="history-panel__count" aria-label="{{ itemCount() }} colors in history">
+          {{ itemCount() }}
+        </span>
+      }
+    </div>
+
+    <div class="history-panel__actions">
+      @if (hasItems()) {
+        <button
+          class="glass-button history-panel__clear"
+          (click)="clear()"
+          aria-label="Clear all history"
+          type="button"
+        >
+          Clear all
+        </button>
+      }
+      <button
+        class="glass-button history-panel__close"
+        (click)="close()"
+        aria-label="Close history panel"
+        type="button"
+      >
+        ✕
+      </button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="history-panel__body">
+    @if (hasItems()) {
+      <ul class="history-list" aria-label="Previously generated colors">
+        @for (color of history(); track color.id) {
+          <li class="history-item">
+            <button
+              class="history-item__swatch-btn"
+              (click)="restore(color)"
+              [attr.aria-label]="'Restore color ' + color.hex"
+              type="button"
+            >
+              <span
+                class="history-item__swatch"
+                [style.background-color]="color.hex"
+                aria-hidden="true"
+              ></span>
+              <span class="history-item__hex">{{ color.hex }}</span>
+              <span class="history-item__rgb">
+                rgb({{ color.rgb.r }}, {{ color.rgb.g }}, {{ color.rgb.b }})
+              </span>
+            </button>
+
+            <button
+              class="glass-button history-item__remove"
+              (click)="remove(color.id, $event)"
+              [attr.aria-label]="'Remove color ' + color.hex + ' from history'"
+              type="button"
+            >
+              ✕
+            </button>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="history-panel__empty">
+        <span aria-hidden="true">◈</span>
+        <p>No colors yet.<br />Generate one to start your history.</p>
+      </div>
+    }
+  </div>
+</aside>
