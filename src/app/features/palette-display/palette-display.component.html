@@ -1,0 +1,23 @@
+@if (hasMultiple()) {
+  <div class="palette-display glass-panel" role="group" aria-label="Color palette swatches">
+    <p class="palette-display__label">Palette</p>
+
+    <ul class="swatch-list">
+      @for (color of palette(); track color.id) {
+        <li class="swatch-wrapper">
+          <button
+            class="swatch"
+            [class.swatch--active]="isActive(color)"
+            [style.background-color]="color.hex"
+            (click)="select(color)"
+            [attr.aria-label]="'Select color ' + color.hex"
+            [attr.aria-pressed]="isActive(color)"
+            type="button"
+          >
+            <span class="swatch__hex">{{ color.hex }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+}
