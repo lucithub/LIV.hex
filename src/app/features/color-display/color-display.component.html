@@ -1,0 +1,52 @@
+<section
+  class="color-display glass-panel"
+  [class.text-light]="textStyle() === 'light'"
+  [class.text-dark]="textStyle() === 'dark'"
+  aria-label="Color information panel"
+>
+  <!-- Main hex display -->
+  <div class="color-display__hero">
+    <p class="color-display__label">Current Color</p>
+    <h1 class="color-display__hex">{{ color().hex }}</h1>
+
+    <!-- WCAG Badge -->
+    <div
+      class="wcag-badge"
+      [class]="'wcag-badge--' + wcag().rating"
+      [attr.aria-label]="'WCAG contrast rating: ' + wcag().rating + ', ratio ' + wcag().ratio + ':1'"
+    >
+      <span class="wcag-badge__icon">
+        @if (wcag().rating === 'fail') { ✕ } @else { ✓ }
+      </span>
+      <span class="wcag-badge__rating">{{ wcag().rating }}</span>
+      <span class="wcag-badge__ratio">{{ wcag().ratio }}:1</span>
+    </div>
+  </div>
+
+  <!-- Format chips -->
+  <ul class="format-list" aria-label="Color format values">
+    @for (fmt of formats(); track fmt.label) {
+      <li class="format-chip">
+        <span class="format-chip__label">{{ fmt.label }}</span>
+        <span class="format-chip__value" [attr.aria-label]="fmt.label + ' value: ' + fmt.value">
+          {{ fmt.value }}
+        </span>
+        <button
+          class="format-chip__copy glass-button"
+          [class.format-chip__copy--copied]="isCopied(fmt.label)"
+          (click)="copy(fmt.value, fmt.label)"
+          [attr.aria-label]="'Copy ' + fmt.label + ' value'"
+          type="button"
+        >
+          @if (isCopied(fmt.label)) {
+            <span aria-hidden="true">✓</span>
+            <span>Copied!</span>
+          } @else {
+            <span aria-hidden="true">⎘</span>
+            <span>Copy</span>
+          }
+        </button>
+      </li>
+    }
+  </ul>
+</section>
