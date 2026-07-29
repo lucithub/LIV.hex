@@ -170,6 +170,44 @@ export class ColorService {
   }
 
   // ─────────────────────────────────────────────
+  // Accessibility & Contrast (WCAG 2.1)
+  // ─────────────────────────────────────────────
+
+  /**
+   * Returns the WCAG 2.1 contrast ratio between two colors.
+   * Value ranges from 1 (no contrast) to 21 (black on white).
+   */
+  getContrastRatio(bg: Color, fg: Color): number {
+    const l1 = this.relativeLuminance(bg.rgb);
+    const l2 = this.relativeLuminance(fg.rgb);
+    const lighter = Math.max(l1, l2);
+    const darker  = Math.min(l1, l2);
+    return parseFloat(((lighter + 0.05) / (darker + 0.05)).toFixed(2));
+  }
+
+  /**
+   * Returns 'light' (use white text) or 'dark' (use dark text)
+   * based on which has better contrast against the given background.
+   */
+  getAdaptiveTextColor(bg: Color): 'light' | 'dark' {
+    const white = this.fromHsl({ h: 0, s: 0, l: 100 });
+    const black = this.fromHsl({ h: 0, s: 0, l:   0 });
+    const contrastWithWhite = this.getContrastRatio(bg, white);
+    const contrastWithBlack = this.getContrastRatio(bg, black);
+    return contrastWithWhite >= contrastWithBlack ? 'light' : 'dark';
+  }
+
+  /**
+   * Rates a contrast ratio against WCAG 2.1 thresholds for normal text.
+   * AAA >= 7.0 | AA >= 4.5 | fail < 4.5
+   */
+  getWcagRating(ratio: number): 'AAA' | 'AA' | 'fail' {
+    if (ratio >= 7.0)  return 'AAA';
+    if (ratio >= 4.5)  return 'AA';
+    return 'fail';
+  }
+
+  // ─────────────────────────────────────────────
   // Helpers
   // ─────────────────────────────────────────────
 
@@ -179,5 +217,17 @@ export class ColorService {
 
   private clampLightness(l: number): number {
     return Math.min(95, Math.max(5, l));
+  }
+
+  /**
+   * WCAG 2.1 relative luminance of an sRGB color.
+   * https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
+   */
+  private relativeLuminance({ r, g, b }: ColorRgb): number {
+    const linearize = (c: number) => {
+      const n = c / 255;
+      return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
   }
 }
