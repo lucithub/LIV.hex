@@ -117,9 +117,42 @@ kbd {
 
 /* ─── Mobile ─── */
 @media (max-width: 600px) {
-  .toolbar { padding: 1rem; }
+  .toolbar {
+    padding: 1rem;
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-left:  max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
 
-  .main-content { padding: 0.5rem 1rem 1rem; }
+  .main-content {
+    padding: 0.5rem 1rem 1rem;
+    padding-left:  max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
 
   .shortcuts-hint { display: none; }
 }
+
+/* ─── Landscape mobile ─── */
+@media (max-height: 500px) and (max-width: 900px) {
+  .app-shell { grid-template-rows: auto 1fr; }
+
+  .toolbar { padding: 0.5rem 1.25rem; }
+
+  .main-content { padding: 0.25rem 1rem 0.5rem; }
+
+  .center-card { gap: 0.75rem; }
+
+  .shortcuts-hint { display: none; }
+}
+
+/* ─── Tall desktop — add breathing room ─── */
+@media (min-height: 900px) {
+  .main-content { padding-top: 2rem; padding-bottom: 3rem; }
+}
+
+/* ─── Safe-area bottom for shortcuts footer ─── */
+.shortcuts-hint {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+

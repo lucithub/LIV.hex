@@ -47,6 +47,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overscroll-behavior: none; /* prevent pull-to-refresh on mobile */
 }
 
 /* Glassmorphism Utilities */
@@ -71,6 +72,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  touch-action: manipulation; /* remove 300ms tap delay */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .glass-button:hover {

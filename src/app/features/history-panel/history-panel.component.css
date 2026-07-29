@@ -216,6 +216,10 @@
   .history-panel--open {
     transform: translateY(0);
   }
+
+  .history-panel__body {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
 }
 
 /* ─── Reduced motion ─── */

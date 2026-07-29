@@ -162,6 +162,10 @@
     from { transform: translateY(100%); }
     to   { transform: translateY(0); }
   }
+
+  .export-dialog__footer {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
 }
 
 /* ─── Reduced motion ─── */

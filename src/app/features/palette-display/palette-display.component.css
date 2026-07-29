@@ -43,6 +43,8 @@
   cursor: pointer;
   position: relative;
   overflow: visible;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
