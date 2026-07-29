@@ -9,15 +9,117 @@
     color var(--transition-bg);
 }
 
+/* ─── Shell ─── */
 .app-shell {
-  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   min-height: 100vh;
-  position: relative;
 }
 
-.app-content {
-  min-height: 100vh;
-  padding: 2rem;
+/* ─── Toolbar ─── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.toolbar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-text-adaptive);
+  opacity: 0.7;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+}
+
+.toolbar__btn:hover { opacity: 1; transform: none; }
+
+.toolbar__btn--active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ─── Logo ─── */
+.toolbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-text-adaptive);
+  user-select: none;
+}
+
+.toolbar__logo-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color var(--transition-bg);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.toolbar__logo-accent {
+  opacity: 0.6;
+}
+
+/* ─── Main content ─── */
+.main-content {
+  padding: 1rem 2rem 2rem;
+  align-items: center;
+}
+
+/* ─── Center card ─── */
+.center-card {
+  display: flex;
   flex-direction: column;
-  gap: 2rem;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 540px;
+}
+
+/* ─── Keyboard shortcuts hint ─── */
+.shortcuts-hint {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  font-size: 0.72rem;
+  opacity: 0.4;
+  color: var(--color-text-adaptive);
+  flex-wrap: wrap;
+}
+
+.shortcuts-hint span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+kbd {
+  font-family: var(--font-family);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  border-bottom-width: 2px;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 600px) {
+  .toolbar { padding: 1rem; }
+
+  .main-content { padding: 0.5rem 1rem 1rem; }
+
+  .shortcuts-hint { display: none; }
 }

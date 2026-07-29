@@ -1,9 +1,75 @@
-<main class="app-shell">
-  <!-- Color panels will be projected here in T-07+ -->
-  <div class="app-content flex-center">
-    <!-- ColorDisplayComponent (T-07) -->
-    <!-- GenerateButtonComponent (T-08) -->
-    <!-- HistoryPanelComponent (T-10) -->
-    <!-- ExportPanelComponent (T-11) -->
-  </div>
-</main>
+<div class="app-shell">
+
+  <!-- ── Toolbar ── -->
+  <header class="toolbar">
+    <button
+      class="toolbar__btn glass-button"
+      [class.toolbar__btn--active]="historyOpen()"
+      (click)="toggleHistory()"
+      aria-label="Toggle history panel (H)"
+      aria-controls="history-panel"
+      [attr.aria-expanded]="historyOpen()"
+      type="button"
+    >
+      <span aria-hidden="true">◷</span>
+      <span>History</span>
+    </button>
+
+    <div class="toolbar__logo" aria-label="LIV.hex color generator">
+      <span class="toolbar__logo-dot" [style.background-color]="currentColor().hex" aria-hidden="true"></span>
+      LIV<span class="toolbar__logo-accent">.hex</span>
+    </div>
+
+    <button
+      class="toolbar__btn glass-button"
+      [class.toolbar__btn--active]="exportOpen()"
+      (click)="toggleExport()"
+      aria-label="Toggle export panel (E)"
+      aria-controls="export-panel"
+      [attr.aria-expanded]="exportOpen()"
+      type="button"
+    >
+      <span>Export</span>
+      <span aria-hidden="true">⬡</span>
+    </button>
+  </header>
+
+  <!-- ── Main card ── -->
+  <main class="main-content flex-center">
+    <div class="center-card">
+      <app-color-display [color]="currentColor()" />
+
+      <app-generate-button (generate)="onGenerate($event)" />
+
+      <app-palette-display
+        [palette]="currentPalette()"
+        [activeColorId]="currentColor().id"
+        (colorSelected)="onColorSelected($event)"
+      />
+    </div>
+  </main>
+
+  <!-- ── Keyboard shortcuts hint ── -->
+  <footer class="shortcuts-hint" aria-label="Keyboard shortcuts">
+    <span><kbd>Space</kbd> Generate</span>
+    <span><kbd>H</kbd> History</span>
+    <span><kbd>E</kbd> Export</span>
+    <span><kbd>Esc</kbd> Close</span>
+  </footer>
+
+</div>
+
+<!-- ── Panels (portaled to edge of screen) ── -->
+<app-history-panel
+  id="history-panel"
+  [isOpen]="historyOpen()"
+  (colorRestored)="onColorRestored($event)"
+  (closed)="historyOpen.set(false)"
+/>
+
+<app-export-panel
+  id="export-panel"
+  [isOpen]="exportOpen()"
+  [palette]="exportPalette"
+  (closed)="exportOpen.set(false)"
+/>
