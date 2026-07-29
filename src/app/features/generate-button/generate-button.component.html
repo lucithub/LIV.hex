@@ -1,0 +1,32 @@
+<div class="generate-wrapper">
+  <!-- Palette mode selector -->
+  <nav class="mode-selector glass-panel" role="group" aria-label="Palette generation mode">
+    @for (mode of modes; track mode.value) {
+      <button
+        class="mode-selector__btn glass-button"
+        [class.mode-selector__btn--active]="selectedMode() === mode.value"
+        (click)="selectMode(mode.value)"
+        [attr.aria-pressed]="selectedMode() === mode.value"
+        [attr.aria-label]="mode.label + ' mode'"
+        type="button"
+      >
+        <span class="mode-selector__full-label">{{ mode.label }}</span>
+        <span class="mode-selector__short-label" aria-hidden="true">{{ mode.shortLabel }}</span>
+      </button>
+    }
+  </nav>
+
+  <!-- Main generate button -->
+  <button
+    id="generate-btn"
+    class="generate-btn"
+    [class.generate-btn--animating]="isAnimating()"
+    (click)="onGenerate()"
+    aria-label="Generate a new color — or press Space"
+    type="button"
+  >
+    <span class="generate-btn__icon" aria-hidden="true">◈</span>
+    <span class="generate-btn__text">Generate</span>
+    <span class="generate-btn__hint">Space</span>
+  </button>
+</div>
