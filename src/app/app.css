@@ -1,1 +1,23 @@
-/* app.css — component-level styles will live here */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-bg, #1a1a1a);
+  color: var(--color-text-adaptive, #ffffff);
+  transition:
+    background-color var(--transition-bg),
+    color var(--transition-bg);
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.app-content {
+  min-height: 100vh;
+  padding: 2rem;
+  flex-direction: column;
+  gap: 2rem;
+}
