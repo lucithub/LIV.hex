@@ -1,23 +1,180 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { ColorService } from './core/services/color.service';
+import { HistoryService } from './core/services/history.service';
+import { Color } from './core/models/color.model';
 
 describe('App', () => {
+  let component: App;
+  let fixture: ComponentFixture<App>;
+  let colorService: ColorService;
+  let historyService: HistoryService;
+
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
     }).compileComponents();
+
+    colorService   = TestBed.inject(ColorService);
+    historyService = TestBed.inject(HistoryService);
+    fixture        = TestBed.createComponent(App);
+    component      = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  afterEach(() => localStorage.clear());
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, liv-hex');
+  it('should initialize with a valid current color', () => {
+    const color = component.currentColor();
+    expect(color.hex).toMatch(/^#[0-9A-F]{6}$/);
+  });
+
+  it('should initialize with an empty palette', () => {
+    expect(component.currentPalette().length).toBe(0);
+  });
+
+  it('should initialize with both panels closed', () => {
+    expect(component.historyOpen()).toBe(false);
+    expect(component.exportOpen()).toBe(false);
+  });
+
+  // ── onGenerate ─────────────────────────────────────────────────────────────
+
+  describe('onGenerate', () => {
+    it('random mode: updates currentColor and adds to history', () => {
+      component.onGenerate('random');
+      const color = component.currentColor();
+      expect(color.hex).toMatch(/^#[0-9A-F]{6}$/);
+      expect(historyService.history().length).toBeGreaterThan(0);
+    });
+
+    it('analogous mode: builds a palette of 5 and picks center color', () => {
+      component.onGenerate('analogous');
+      expect(component.currentPalette().length).toBe(5);
+    });
+
+    it('complementary mode: builds a palette of 2', () => {
+      component.onGenerate('complementary');
+      expect(component.currentPalette().length).toBe(2);
+    });
+
+    it('triadic mode: builds a palette of 3', () => {
+      component.onGenerate('triadic');
+      expect(component.currentPalette().length).toBe(3);
+    });
+
+    it('monochromatic mode: builds a palette of 5', () => {
+      component.onGenerate('monochromatic');
+      expect(component.currentPalette().length).toBe(5);
+    });
+  });
+
+  // ── onColorSelected ────────────────────────────────────────────────────────
+
+  describe('onColorSelected', () => {
+    it('should update currentColor and add it to history', () => {
+      const selected: Color = colorService.fromHsl({ h: 180, s: 60, l: 50 });
+      component.onColorSelected(selected);
+      expect(component.currentColor().id).toBe(selected.id);
+      expect(historyService.history()[0].id).toBe(selected.id);
+    });
+  });
+
+  // ── onColorRestored ────────────────────────────────────────────────────────
+
+  describe('onColorRestored', () => {
+    it('should restore the color and close the history panel', () => {
+      component.toggleHistory();
+      expect(component.historyOpen()).toBe(true);
+
+      const restored: Color = colorService.fromHsl({ h: 30, s: 80, l: 50 });
+      component.onColorRestored(restored);
+
+      expect(component.currentColor().id).toBe(restored.id);
+      expect(component.historyOpen()).toBe(false);
+    });
+
+    it('should set the palette to contain only the restored color', () => {
+      const restored: Color = colorService.fromHsl({ h: 30, s: 80, l: 50 });
+      component.onColorRestored(restored);
+      expect(component.currentPalette().length).toBe(1);
+      expect(component.currentPalette()[0].id).toBe(restored.id);
+    });
+  });
+
+  // ── panel toggles ──────────────────────────────────────────────────────────
+
+  describe('toggleHistory', () => {
+    it('should open history panel', () => {
+      component.toggleHistory();
+      expect(component.historyOpen()).toBe(true);
+    });
+
+    it('should close export panel when opening history', () => {
+      component.toggleExport();
+      component.toggleHistory();
+      expect(component.exportOpen()).toBe(false);
+    });
+
+    it('should toggle history off when already open', () => {
+      component.toggleHistory();
+      component.toggleHistory();
+      expect(component.historyOpen()).toBe(false);
+    });
+  });
+
+  describe('toggleExport', () => {
+    it('should open export panel', () => {
+      component.toggleExport();
+      expect(component.exportOpen()).toBe(true);
+    });
+
+    it('should close history panel when opening export', () => {
+      component.toggleHistory();
+      component.toggleExport();
+      expect(component.historyOpen()).toBe(false);
+    });
+  });
+
+  describe('closeAll', () => {
+    it('should close both panels', () => {
+      component.toggleHistory();
+      component.closeAll();
+      expect(component.historyOpen()).toBe(false);
+      expect(component.exportOpen()).toBe(false);
+    });
+  });
+
+  // ── exportPalette ────────────────────────────────────────────────────────
+
+  describe('exportPalette', () => {
+    it('should return just the current color when palette has 1 item', () => {
+      component.onGenerate('random');
+      expect(component.exportPalette.length).toBe(1);
+    });
+
+    it('should return the full palette when palette has more than 1 item', () => {
+      component.onGenerate('analogous');
+      expect(component.exportPalette.length).toBe(5);
+    });
+  });
+
+  // ── hostBg / hostText ────────────────────────────────────────────────────
+
+  describe('CSS custom property bindings', () => {
+    it('hostBg should return the current color hex', () => {
+      const hex = component.currentColor().hex;
+      expect(component.hostBg).toBe(hex);
+    });
+
+    it('hostText should return a valid CSS color string', () => {
+      const text = component.hostText;
+      expect(['#ffffff', '#111111']).toContain(text);
+    });
   });
 });

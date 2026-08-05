@@ -6,7 +6,7 @@ type ShortcutHandler = () => void;
 /**
  * Global keyboard shortcut registry.
  * Register handlers by key name (case-insensitive).
- * Handlers are NOT called when the user is typing in an input/textarea/select.
+ * Handlers are NOT called when the user is typing in an input/textarea/select/contenteditable.
  */
 @Injectable({ providedIn: 'root' })
 export class KeyboardShortcutService implements OnDestroy {
@@ -45,12 +45,18 @@ export class KeyboardShortcutService implements OnDestroy {
 
   private isTyping(event: KeyboardEvent): boolean {
     const target = event.target as HTMLElement;
-    const tag = target?.tagName?.toUpperCase();
+    if (!target) return false;
+
+    const tag = target.tagName?.toUpperCase();
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+      return true;
+    }
+
     return (
-      tag === 'INPUT' ||
-      tag === 'TEXTAREA' ||
-      tag === 'SELECT' ||
-      target?.isContentEditable
+      Boolean(target.isContentEditable) ||
+      target.getAttribute?.('contenteditable') === 'true' ||
+      target.getAttribute?.('contenteditable') === '' ||
+      Boolean(target.closest?.('[contenteditable="true"], [contenteditable=""]'))
     );
   }
 }
