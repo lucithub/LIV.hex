@@ -164,6 +164,48 @@ describe('App', () => {
     });
   });
 
+  // ── onManualColorChange ────────────────────────────────────────────────────
+
+  describe('onManualColorChange', () => {
+    it('should update current color immediately', () => {
+      const color: Color = colorService.fromHsl({ h: 120, s: 80, l: 40 });
+      component.onManualColorChange({ color, isFinal: false });
+
+      expect(component.currentColor().id).toBe(color.id);
+    });
+
+    it('should NOT add to history when isFinal is false', () => {
+      const initialHistoryCount = historyService.history().length;
+      const color: Color = colorService.fromHsl({ h: 120, s: 80, l: 40 });
+      component.onManualColorChange({ color, isFinal: false });
+
+      expect(historyService.history().length).toBe(initialHistoryCount);
+    });
+
+    it('should add to history when isFinal is true', () => {
+      const initialHistoryCount = historyService.history().length;
+      const color: Color = colorService.fromHsl({ h: 120, s: 80, l: 40 });
+      component.onManualColorChange({ color, isFinal: true });
+
+      expect(historyService.history().length).toBe(initialHistoryCount + 1);
+      expect(historyService.history()[0].id).toBe(color.id);
+    });
+
+    it('should regenerate current palette dynamically if a harmonic mode is active', () => {
+      component['generateBtn'].selectedMode.set('analogous');
+      component.onGenerate('analogous');
+      const paletteBefore = component.currentPalette();
+      expect(paletteBefore.length).toBe(5);
+
+      const color: Color = colorService.fromHsl({ h: 150, s: 80, l: 40 });
+      component.onManualColorChange({ color, isFinal: false });
+
+      const paletteAfter = component.currentPalette();
+      expect(paletteAfter.length).toBe(5);
+      expect(paletteAfter[2].id).toBe(color.id); // center color is seed
+    });
+  });
+
   // ── hostBg / hostText ────────────────────────────────────────────────────
 
   describe('CSS custom property bindings', () => {

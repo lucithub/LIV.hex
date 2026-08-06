@@ -8,7 +8,18 @@
   <!-- Main hex display -->
   <div class="color-display__hero">
     <p class="color-display__label">Current Color</p>
-    <h1 class="color-display__hex">{{ color().hex }}</h1>
+    <div class="color-display__hex-wrapper">
+      <input
+        #hexInput
+        type="text"
+        class="color-display__hex-input"
+        [value]="color().hex"
+        (input)="onHexInput(hexInput.value)"
+        (blur)="onHexBlur(hexInput)"
+        (keydown.enter)="hexInput.blur()"
+        aria-label="Edit hex color"
+      />
+    </div>
 
     <!-- WCAG Badge -->
     <div
@@ -21,6 +32,55 @@
       </span>
       <span class="wcag-badge__rating">{{ wcag().rating }}</span>
       <span class="wcag-badge__ratio">{{ wcag().ratio }}:1</span>
+    </div>
+  </div>
+
+  <!-- Sliders manual adjustment -->
+  <div
+    class="color-sliders"
+    aria-label="Adjust HSL values manually"
+    [style.--slider-hue]="color().hsl.h"
+    [style.--slider-sat]="color().hsl.s + '%'"
+    [style.--slider-light]="color().hsl.l + '%'"
+  >
+    <div class="slider-group">
+      <span class="slider-label">H: {{ color().hsl.h }}°</span>
+      <input
+        type="range"
+        min="0"
+        max="360"
+        [value]="color().hsl.h"
+        (input)="onHslSliderInput($event, 'h')"
+        (change)="onHslSliderChange($event, 'h')"
+        class="color-slider color-slider--hue"
+        aria-label="Hue slider"
+      />
+    </div>
+    <div class="slider-group">
+      <span class="slider-label">S: {{ color().hsl.s }}%</span>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        [value]="color().hsl.s"
+        (input)="onHslSliderInput($event, 's')"
+        (change)="onHslSliderChange($event, 's')"
+        class="color-slider color-slider--saturation"
+        aria-label="Saturation slider"
+      />
+    </div>
+    <div class="slider-group">
+      <span class="slider-label">L: {{ color().hsl.l }}%</span>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        [value]="color().hsl.l"
+        (input)="onHslSliderInput($event, 'l')"
+        (change)="onHslSliderChange($event, 'l')"
+        class="color-slider color-slider--lightness"
+        aria-label="Lightness slider"
+      />
     </div>
   </div>
 

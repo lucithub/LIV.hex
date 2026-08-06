@@ -92,6 +92,24 @@ export class App implements AfterViewInit {
     this.historyService.add(color);
   }
 
+  // ─── Manual HSL/HEX color change ───
+  onManualColorChange(event: { color: Color; isFinal: boolean }): void {
+    const { color, isFinal } = event;
+    this.currentColor.set(color);
+
+    const mode = this.generateBtn?.selectedMode() || 'random';
+    if (mode !== 'random') {
+      const palette = this.colorService.generateHarmonic(color, mode);
+      this.currentPalette.set(palette);
+    } else {
+      this.currentPalette.set([color]);
+    }
+
+    if (isFinal) {
+      this.historyService.add(color);
+    }
+  }
+
   // ─── History restored ───
   onColorRestored(color: Color): void {
     this.currentColor.set(color);

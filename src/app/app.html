@@ -37,7 +37,10 @@
   <!-- ── Main card ── -->
   <main class="main-content flex-center">
     <div class="center-card">
-      <app-color-display [color]="currentColor()" />
+      <app-color-display
+        [color]="currentColor()"
+        (colorChanged)="onManualColorChange($event)"
+      />
 
       <app-generate-button (generate)="onGenerate($event)" />
 
