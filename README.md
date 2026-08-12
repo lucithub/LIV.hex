@@ -1,7 +1,10 @@
 <div align="center">
-  <h1>✨ LIV.hex</h1>
+  <h1>
+    <img src="public/logoBIA.png" alt="Logo LIV.hex"><br>
+    LIV.hex
+  </h1>
   <p><strong>A Modern, Fast, and Highly Interactive Color Palette Generator</strong></p>
-  
+
   <p>
     <img src="https://img.shields.io/badge/Angular-18+-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular" />
     <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
