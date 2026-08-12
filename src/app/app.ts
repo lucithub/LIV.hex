@@ -60,6 +60,20 @@ export class App implements AfterViewInit {
       : '#111111';
   }
 
+  /** T-25: 3-layer editorial background bound to the host element */
+  @HostBinding('style.background')
+  get hostBackground(): string {
+    const hex = this.currentColor().hex;
+    return [
+      // Layer 3 — Vignette: dark edges frame the composition
+      'radial-gradient(ellipse 120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%)',
+      // Layer 2 — Glow: off-center warm highlight simulates studio light
+      `radial-gradient(ellipse 60% 50% at 50% 20%, ${hex}55 0%, transparent 70%)`,
+      // Layer 1 — Base: the main color bleeding into a very dark background
+      `radial-gradient(ellipse 100% 100% at 50% 50%, ${hex}CC 0%, ${hex}22 60%, #0d0d0d 100%)`,
+    ].join(', ');
+  }
+
   ngAfterViewInit(): void {
     this.shortcuts.register(' ',      () => this.generateBtn?.triggerGenerate());
     this.shortcuts.register('h',      () => this.toggleHistory());

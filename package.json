@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng tqest"
   },
   "private": true,
   "packageManager": "npm@11.12.0",

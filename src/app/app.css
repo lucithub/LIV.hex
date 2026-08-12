@@ -2,10 +2,10 @@
   display: block;
   width: 100%;
   min-height: 100vh;
-  background-color: var(--color-bg, #1a1a1a);
+  background-color: #0d0d0d; /* fallback for older browsers */
   color: var(--color-text-adaptive, #ffffff);
   transition:
-    background-color var(--transition-bg),
+    background var(--transition-bg),
     color var(--transition-bg);
 }
 
