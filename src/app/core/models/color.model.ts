@@ -1,4 +1,4 @@
-export type HarmonicType = 'analogous' | 'complementary' | 'monochromatic' | 'triadic';
+export type HarmonicType = 'analogous' | 'complementary' | 'duotone' | 'monochromatic' | 'triadic';
 
 export interface ColorRgb {
   r: number;

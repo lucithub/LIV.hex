@@ -212,6 +212,16 @@ describe('ColorService', () => {
       expect(palette[2].hsl.h).toBe(300); // 60 + 240
     });
 
+    it('duotone should return exactly 2 complementary colors', () => {
+      const palette = service.generateHarmonic(base, 'duotone');
+      expect(palette.length).toBe(2);
+      // Second color should be the complementary hue (60 + 180 = 240)
+      expect(palette[1].hsl.h).toBe(240);
+      // Both colors should have fixed lightness values (45 and 55)
+      expect(palette[0].hsl.l).toBe(45);
+      expect(palette[1].hsl.l).toBe(55);
+    });
+
     it('wrapHue should handle values > 360', () => {
       const redBase = service.fromHsl({ h: 350, s: 70, l: 50 });
       const palette = service.generateHarmonic(redBase, 'complementary');

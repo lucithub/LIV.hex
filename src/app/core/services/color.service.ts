@@ -58,6 +58,14 @@ export class ColorService {
           this.fromHsl({ h: this.wrapHue(h + 120), s, l }),
           this.fromHsl({ h: this.wrapHue(h + 240), s, l }),
         ];
+
+      case 'duotone':
+        // Two high-contrast complementary colors with constrained saturation
+        // and fixed lightness for maximum editorial impact.
+        return [
+          this.fromHsl({ h,                        s: Math.min(s + 10, 90), l: 45 }),
+          this.fromHsl({ h: this.wrapHue(h + 180), s: Math.min(s + 10, 90), l: 55 }),
+        ];
     }
   }
 

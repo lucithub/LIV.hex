@@ -26,10 +26,11 @@ export class GenerateButtonComponent {
   readonly generate = output<GenerateMode>();
 
   readonly modes: ModeOption[] = [
-    { value: 'random',         label: 'Random',          shortLabel: 'Random' },
-    { value: 'analogous',      label: 'Analogous',       shortLabel: 'Analog' },
-    { value: 'complementary',  label: 'Complementary',   shortLabel: 'Comp'  },
-    { value: 'monochromatic',  label: 'Monochromatic',   shortLabel: 'Mono'  },
+    { value: 'random',         label: 'Random',          shortLabel: 'Random'  },
+    { value: 'analogous',      label: 'Analogous',       shortLabel: 'Analog'  },
+    { value: 'complementary',  label: 'Complementary',   shortLabel: 'Comp'    },
+    { value: 'duotone',        label: 'Duotone',         shortLabel: 'Duo'     },
+    { value: 'monochromatic',  label: 'Monochromatic',   shortLabel: 'Mono'    },
     { value: 'triadic',        label: 'Triadic',         shortLabel: 'Triadic' },
   ];
 
