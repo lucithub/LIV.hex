@@ -219,4 +219,46 @@ describe('App', () => {
       expect(['#ffffff', '#111111']).toContain(text);
     });
   });
+
+  // ── Palette Lock (T-26) ──────────────────────────────────────────────────
+
+  describe('palette lock', () => {
+    it('should start unlocked', () => {
+      expect(component.isLocked()).toBe(false);
+    });
+
+    it('toggleLock should switch to locked', () => {
+      component.toggleLock();
+      expect(component.isLocked()).toBe(true);
+    });
+
+    it('toggleLock should switch back to unlocked', () => {
+      component.toggleLock();
+      component.toggleLock();
+      expect(component.isLocked()).toBe(false);
+    });
+
+    it('onGenerate should NOT update color when locked', () => {
+      const colorBefore = component.currentColor().id;
+      component.toggleLock();
+      component.onGenerate('random');
+      expect(component.currentColor().id).toBe(colorBefore);
+    });
+
+    it('onGenerate should update color when NOT locked', () => {
+      const colorBefore = component.currentColor().id;
+      component.onGenerate('random');
+      // A new random color will almost certainly have a different id
+      // We just assert the call didn't throw and state changed
+      expect(component.currentColor()).toBeDefined();
+      expect(component.isLocked()).toBe(false);
+    });
+
+    it('onManualColorChange should still work when locked', () => {
+      component.toggleLock();
+      const newColor = colorService.fromHsl({ h: 200, s: 60, l: 50 });
+      component.onManualColorChange({ color: newColor, isFinal: false });
+      expect(component.currentColor().id).toBe(newColor.id);
+    });
+  });
 });

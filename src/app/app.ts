@@ -46,6 +46,7 @@ export class App implements AfterViewInit {
   readonly currentPalette = signal<Color[]>([]);
   readonly historyOpen    = signal(false);
   readonly exportOpen     = signal(false);
+  readonly isLocked       = signal(false);
 
   // ─── Host bindings — drives full-page background transition ───
   @HostBinding('style.--color-bg')
@@ -78,11 +79,14 @@ export class App implements AfterViewInit {
     this.shortcuts.register(' ',      () => this.generateBtn?.triggerGenerate());
     this.shortcuts.register('h',      () => this.toggleHistory());
     this.shortcuts.register('e',      () => this.toggleExport());
+    this.shortcuts.register('l',      () => this.toggleLock());
     this.shortcuts.register('escape', () => this.closeAll());
   }
 
   // ─── Generate ───
   onGenerate(mode: GenerateMode): void {
+    if (this.isLocked()) return; // palette is locked — ignore generation
+
     let color: Color;
     let palette: Color[];
 
@@ -142,6 +146,11 @@ export class App implements AfterViewInit {
     const next = !this.exportOpen();
     this.exportOpen.set(next);
     if (next) this.historyOpen.set(false);
+  }
+
+  // ─── Palette lock toggle ───
+  toggleLock(): void {
+    this.isLocked.update(v => !v);
   }
 
   closeAll(): void {
