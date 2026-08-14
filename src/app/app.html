@@ -1,5 +1,14 @@
 <div class="app-shell">
 
+  <!-- ── Swatch bar (visible only with multi-color palettes) ── -->
+  @if (currentPalette().length > 1) {
+    <app-swatch-bar
+      [palette]="currentPalette()"
+      [activeColorId]="currentColor().id"
+      (colorSelected)="onColorSelected($event)"
+    />
+  }
+
   <!-- ── Toolbar ── -->
   <header class="toolbar">
     <button

@@ -18,6 +18,7 @@ import { GenerateButtonComponent, GenerateMode } from './features/generate-butto
 import { PaletteDisplayComponent } from './features/palette-display/palette-display.component';
 import { HistoryPanelComponent } from './features/history-panel/history-panel.component';
 import { ExportPanelComponent } from './features/export-panel/export-panel.component';
+import { SwatchBarComponent } from './features/swatch-bar/swatch-bar.component';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ import { ExportPanelComponent } from './features/export-panel/export-panel.compo
     PaletteDisplayComponent,
     HistoryPanelComponent,
     ExportPanelComponent,
+    SwatchBarComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',

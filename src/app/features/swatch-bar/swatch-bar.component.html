@@ -1,0 +1,13 @@
+<nav class="swatch-bar" aria-label="Palette swatches">
+  @for (color of palette(); track color.id) {
+    <button
+      class="swatch"
+      [class.swatch--active]="color.id === activeColorId()"
+      [style.background-color]="color.hex"
+      (click)="onSelect(color)"
+      [attr.aria-label]="'Select color ' + color.hex"
+      [attr.aria-current]="color.id === activeColorId() ? 'true' : null"
+      type="button"
+    ></button>
+  }
+</nav>
