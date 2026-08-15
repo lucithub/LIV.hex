@@ -42,3 +42,24 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# --- Project‑specific ignores ---
+# Environment variables (API keys, secrets, etc.)
+*.env*
+# Local npm configuration
+.npmrc
+# Package manager debug logs (pnpm, yarn)
+pnpm-debug.log*
+yarn-debug.log*
+# TypeScript incremental compilation cache
+*.tsbuildinfo
+# Generic caches
+.cache/
+# Full Angular CLI cache folder (covers .angular/cache and other internals)
+.angular/
+# Optional tool caches (safe to include even if not used)
+.parcel-cache/
+.vite/
+.next/
+.husky/
+.storybook/
