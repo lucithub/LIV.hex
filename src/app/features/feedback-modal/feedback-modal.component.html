@@ -1,0 +1,101 @@
+<div class="modal-backdrop" (click)="close()">
+  <div
+    class="modal glass-panel"
+    role="dialog"
+    aria-labelledby="feedback-title"
+    aria-modal="true"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Header -->
+    <div class="modal__header">
+      <h2 id="feedback-title" class="modal__title">Send Feedback</h2>
+      <button
+        class="modal__close glass-button"
+        (click)="close()"
+        aria-label="Close feedback modal"
+        type="button"
+      >✕</button>
+    </div>
+
+    <!-- Idle / Error state: show the form -->
+    @if (state() === 'idle' || state() === 'submitting' || state() === 'error') {
+      <form class="modal__form" (ngSubmit)="onSubmit()">
+
+        <!-- Type selector -->
+        <fieldset class="type-selector">
+          <legend class="field-label">Feedback type</legend>
+          <div class="type-options">
+            @for (opt of typeOptions; track opt.value) {
+              <button
+                type="button"
+                class="type-btn glass-button"
+                [class.type-btn--active]="feedbackType() === opt.value"
+                (click)="selectType(opt.value)"
+                [attr.aria-pressed]="feedbackType() === opt.value"
+              >
+                <span aria-hidden="true">{{ opt.icon }}</span>
+                <span>{{ opt.label }}</span>
+              </button>
+            }
+          </div>
+        </fieldset>
+
+        <!-- Message -->
+        <label class="field-label" for="feedback-message">Message <span class="required">*</span></label>
+        <textarea
+          id="feedback-message"
+          class="field-input field-textarea"
+          placeholder="Describe the bug, idea, or comment..."
+          [ngModel]="message()"
+          (ngModelChange)="message.set($event)"
+          name="message"
+          required
+          rows="4"
+        ></textarea>
+
+        <!-- Email -->
+        <label class="field-label" for="feedback-email">Email <span class="optional">(optional)</span></label>
+        <input
+          id="feedback-email"
+          class="field-input"
+          type="email"
+          placeholder="your@email.com"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+        />
+
+        <!-- Error message -->
+        @if (state() === 'error') {
+          <p class="error-msg" role="alert">Something went wrong. Please try again.</p>
+        }
+
+        <!-- Submit -->
+        <button
+          class="submit-btn glass-button"
+          type="submit"
+          [disabled]="!isValid || state() === 'submitting'"
+        >
+          @if (state() === 'submitting') {
+            <span class="spinner" aria-hidden="true"></span>
+            <span>Sending...</span>
+          } @else {
+            <span>Send Feedback</span>
+          }
+        </button>
+      </form>
+    }
+
+    <!-- Success state -->
+    @if (state() === 'success') {
+      <div class="success-view">
+        <span class="success-icon" aria-hidden="true">✓</span>
+        <p class="success-text">Thank you for your feedback!</p>
+        <div class="success-actions">
+          <button class="glass-button" type="button" (click)="reset()">Send another</button>
+          <button class="glass-button submit-btn" type="button" (click)="close()">Close</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
