@@ -19,6 +19,7 @@ import { PaletteDisplayComponent } from './features/palette-display/palette-disp
 import { HistoryPanelComponent } from './features/history-panel/history-panel.component';
 import { ExportPanelComponent } from './features/export-panel/export-panel.component';
 import { SwatchBarComponent } from './features/swatch-bar/swatch-bar.component';
+import { FeedbackModalComponent } from './features/feedback-modal/feedback-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ import { SwatchBarComponent } from './features/swatch-bar/swatch-bar.component';
     HistoryPanelComponent,
     ExportPanelComponent,
     SwatchBarComponent,
+    FeedbackModalComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -49,6 +51,7 @@ export class App implements AfterViewInit {
   readonly historyOpen    = signal(false);
   readonly exportOpen     = signal(false);
   readonly isLocked       = signal(false);
+  readonly feedbackOpen   = signal(false);
 
   // ─── Host bindings — drives full-page background transition ───
   @HostBinding('style.--color-bg')

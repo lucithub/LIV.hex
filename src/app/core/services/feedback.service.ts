@@ -10,11 +10,16 @@ export class FeedbackService {
   private readonly endpoint = environment.formspreeEndpoint;
 
   submitFeedback(payload: FeedbackPayload): Observable<unknown> {
-    return this.http.post(this.endpoint, {
+    const body: Record<string, string> = {
       _subject: `[LIV.hex Feedback] ${payload.type}`,
       type: payload.type,
       message: payload.message,
-      email: payload.email || 'Not provided',
-    });
+    };
+
+    if (payload.email) {
+      body['email'] = payload.email;
+    }
+
+    return this.http.post(this.endpoint, body);
   }
 }

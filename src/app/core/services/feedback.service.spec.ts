@@ -50,7 +50,7 @@ describe('FeedbackService', () => {
     req.flush({ ok: true });
   });
 
-  it('should send "Not provided" when email is omitted', () => {
+  it('should NOT include email field when email is omitted', () => {
     const payload: FeedbackPayload = {
       type: 'improvement',
       message: 'Add dark mode toggle',
@@ -59,7 +59,7 @@ describe('FeedbackService', () => {
     service.submitFeedback(payload).subscribe();
 
     const req = httpMock.expectOne(r => r.url.includes('formspree.io'));
-    expect(req.request.body.email).toBe('Not provided');
+    expect(req.request.body.email).toBeUndefined();
 
     req.flush({ ok: true });
   });

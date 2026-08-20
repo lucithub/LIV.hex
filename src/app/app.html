@@ -53,6 +53,16 @@
     >
       <span aria-hidden="true">{{ isLocked() ? '🔒' : '🔓' }}</span>
     </button>
+
+    <!-- Feedback button -->
+    <button
+      class="toolbar__btn glass-button"
+      (click)="feedbackOpen.set(true)"
+      aria-label="Send feedback"
+      type="button"
+    >
+      <span aria-hidden="true">💬</span>
+    </button>
   </header>
 
   <!-- ── Main card ── -->
@@ -106,3 +116,10 @@
   [palette]="exportPalette"
   (closed)="exportOpen.set(false)"
 />
+
+<!-- ── Feedback modal ── -->
+@if (feedbackOpen()) {
+  <app-feedback-modal
+    (closed)="feedbackOpen.set(false)"
+  />
+}
